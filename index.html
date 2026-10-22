@@ -111,6 +111,22 @@
   .wines .meta { color: var(--muted); font-size: .95rem; }
   .empty { color: var(--muted); margin: 0; }
 
+  /* Gjesteliste */
+  .guests {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    columns: 2;
+    column-gap: 1.5rem;
+    font-family: var(--serif);
+    font-size: 1.15rem;
+  }
+  .guests li {
+    break-inside: avoid;
+    padding: .6rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .page-dark { transition: none; }
   }
@@ -140,6 +156,21 @@
       <dd><span class="tbd">TBD</span></dd>
     </div>
   </dl>
+
+  <section aria-labelledby="gjester">
+    <h2 id="gjester">Gjester</h2>
+    <ul class="guests">
+      <li>Citona</li>
+      <li>Herman</li>
+      <li>Johanna</li>
+      <li>Preben</li>
+      <li>Mie</li>
+      <li>Ola</li>
+      <li>Maja</li>
+      <li>Anna</li>
+      <li>Markus</li>
+    </ul>
+  </section>
 
   <section aria-labelledby="vinliste">
     <h2 id="vinliste">Vinlisten</h2>
