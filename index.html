@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Bojo Novo aften fredag 20. november</title>
+<title>Bojo Novo-aften fredag 20. november</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
@@ -44,7 +44,6 @@
     background: var(--bg);
     color: var(--text);
     clip-path: inset(100% 0 0 0);
-    transition: clip-path 2.4s cubic-bezier(.3,.1,.2,1);
     pointer-events: none;
     user-select: none;
   }
@@ -136,7 +135,7 @@
 <div class="page" id="page">
 <main>
   <header class="hero">
-    <h1>Bojo Novo aften</h1>
+    <h1>Bojo Novo-aften</h1>
     <p class="lead">Le Beaujolais Nouveau est arrivé! Og det må feires</p>
     <p class="date">20. november</p>
   </header>
@@ -158,7 +157,7 @@
   </dl>
 
   <section aria-labelledby="gjester">
-    <h2 id="gjester">Gjester</h2>
+    <h2 id="gjester">Gjesteliste</h2>
     <ul class="guests">
       <li>Citona</li>
       <li>Herman</li>
@@ -224,9 +223,43 @@
   var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   var pct = Math.min(1, Math.max(0, (today - START) / (EVENT - START)));
 
-  setTimeout(function () {
-    dark.style.clipPath = "inset(" + (100 - pct * 100).toFixed(2) + "% 0 0 0)";
-  }, 150);
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var AMP = 7;     // bølgehøyde (px)
+  var TILT = 16;   // hvor mye vinen heller fram og tilbake (px)
+  var DURATION = 3000;
+  var progress = reduce ? 1 : 0;
+  var t0 = null;
+
+  function draw(now) {
+    var h = dark.offsetHeight;
+    if (pct >= 1 && progress >= 1) { dark.style.clipPath = "none"; return; }
+    var from = h + 24;
+    var base = from + (h * (1 - pct) - from) * progress;
+    var s = now / 1000;
+    var wave = reduce ? 0 : 1;
+    var pts = [];
+    var N = 24;
+    for (var i = 0; i <= N; i++) {
+      var x = i / N;
+      var y = base
+        + wave * TILT * (x - 0.5) * Math.sin(s * 0.8)
+        + wave * AMP * Math.sin(x * Math.PI * 2 - s * 1.1);
+      pts.push((x * 100).toFixed(2) + "% " + y.toFixed(1) + "px");
+    }
+    dark.style.clipPath = "polygon(" + pts.join(",") + ",100% 200%,0% 200%)";
+  }
+
+  function frame(t) {
+    if (t0 === null) t0 = t;
+    if (!reduce) {
+      var p = Math.min(1, Math.max(0, (t - t0 - 150) / DURATION));
+      progress = 1 - Math.pow(1 - p, 3);
+    }
+    draw(t);
+    if (!reduce && !(pct >= 1 && progress >= 1)) requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+  window.addEventListener("resize", function () { draw(performance.now()); });
 </script>
 </body>
 </html>
