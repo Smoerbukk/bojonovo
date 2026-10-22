@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="nb">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bojo Novo aften fredag 20. november</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f4e9e4;
+    --text: #3a1420;
+    --muted: #7a5560;
+    --line: #d9bfc0;
+    --serif: "Fraunces", Georgia, "Times New Roman", serif;
+    --sans: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html { background: var(--bg); }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 1.0625rem;
+    line-height: 1.6;
+  }
+
+  /* Siden består av to like lag: et lyst, og et mørkt som fylles opp nedenfra */
+  .page {
+    position: relative;
+    min-height: 100vh;
+    min-height: 100dvh;
+    overflow: hidden;
+  }
+  .page-dark {
+    --bg: #4a1020;
+    --text: #f6e8e2;
+    --muted: #cba5ac;
+    --line: #7a3a49;
+    position: absolute;
+    inset: 0;
+    background: var(--bg);
+    color: var(--text);
+    clip-path: inset(100% 0 0 0);
+    transition: clip-path 2.4s cubic-bezier(.3,.1,.2,1);
+    pointer-events: none;
+    user-select: none;
+  }
+
+  main {
+    max-width: 34rem;
+    margin: 0 auto;
+    padding: calc(4rem + env(safe-area-inset-top, 0px)) 1.5rem calc(4rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  /* Hero */
+  .hero { text-align: center; }
+  h1 {
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: clamp(2.75rem, 12vw, 4rem);
+    line-height: 1.05;
+    margin: 0 0 1rem;
+    letter-spacing: -0.01em;
+  }
+  .lead {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 1.3rem;
+    color: var(--muted);
+    margin: 0 auto;
+    max-width: 24rem;
+  }
+  .date {
+    margin: 1.5rem 0 0;
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: 1.5rem;
+  }
+
+  /* Brødtekst */
+  .intro { margin: 2.5rem 0 0; }
+  .intro p { margin: 0 0 1em; }
+  .intro p:last-child { margin-bottom: 0; }
+
+  /* Details */
+  .details { margin: 2.5rem 0 0; border-top: 1px solid var(--line); }
+  .row {
+    display: grid;
+    grid-template-columns: 6rem 1fr;
+    gap: 1rem;
+    padding: 1.1rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .row dt { color: var(--muted); font-weight: 500; }
+  .row dd { margin: 0; }
+  .tbd { color: var(--muted); font-style: italic; }
+
+  /* Wine list */
+  h2 {
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: 1.75rem;
+    margin: 3.5rem 0 1rem;
+  }
+  .wines { list-style: none; margin: 0; padding: 0; }
+  .wines li { padding: .9rem 0; border-bottom: 1px solid var(--line); }
+  .wines .name { font-family: var(--serif); font-size: 1.15rem; font-weight: 600; }
+  .wines .meta { color: var(--muted); font-size: .95rem; }
+  .empty { color: var(--muted); margin: 0; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .page-dark { transition: none; }
+  }
+</style>
+</head>
+<body>
+<div class="page" id="page">
+<main>
+  <header class="hero">
+    <h1>Bojo Novo aften</h1>
+    <p class="lead">Le Beaujolais Nouveau est arrivé! Og det må feires</p>
+    <p class="date">20. november</p>
+  </header>
+
+  <section class="intro">
+    <p>Det finnes ikke noe ferskere enn Beaujolais Nouveau! Det er som saft for voksne. Gærgøtt, som man sier i Elverum.</p>
+    <p>Det blir mat i magen før det blir noe godt i glasset, så kom både sulten og tørst.</p>
+  </section>
+
+  <dl class="details">
+    <div class="row">
+      <dt>Når</dt>
+      <dd>Fredag 20. november<br>kl. 18:00 – sent</dd>
+    </div>
+    <div class="row">
+      <dt>Hvor</dt>
+      <dd><span class="tbd">TBD</span></dd>
+    </div>
+  </dl>
+
+  <section aria-labelledby="vinliste">
+    <h2 id="vinliste">Vinlisten</h2>
+    <ul class="wines" id="wine-list"></ul>
+    <p class="empty" id="wine-empty">Vinlisten er ikke klar ennå. Kom tilbake hit senere.</p>
+  </section>
+</main>
+</div>
+
+<script>
+  // Legg til viner her når listen er klar. Eksempel:
+  // { name: "Beaujolais Nouveau", meta: "Gamay, Frankrike, 2026" }
+  var viner = [];
+
+  var list = document.getElementById("wine-list");
+  var empty = document.getElementById("wine-empty");
+  if (viner.length > 0) {
+    empty.hidden = true;
+    viner.forEach(function (v) {
+      var li = document.createElement("li");
+      var name = document.createElement("div");
+      name.className = "name";
+      name.textContent = v.name;
+      li.appendChild(name);
+      if (v.meta) {
+        var meta = document.createElement("div");
+        meta.className = "meta";
+        meta.textContent = v.meta;
+        li.appendChild(meta);
+      }
+      list.appendChild(li);
+    });
+  }
+
+  // Lag et mørkt speilbilde av siden som fylles opp nedenfra.
+  // 0 % = innhøstingen startet (13. august), 100 % = 20. november.
+  var page = document.getElementById("page");
+  var dark = document.createElement("div");
+  dark.className = "page-dark";
+  dark.setAttribute("aria-hidden", "true");
+  var clone = page.querySelector("main").cloneNode(true);
+  Array.prototype.forEach.call(clone.querySelectorAll("[id]"), function (e) {
+    e.removeAttribute("id");
+  });
+  dark.appendChild(clone);
+  page.appendChild(dark);
+
+  var START = new Date(2026, 7, 13);
+  var EVENT = new Date(2026, 10, 20);
+  var now = new Date();
+  var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  var pct = Math.min(1, Math.max(0, (today - START) / (EVENT - START)));
+
+  setTimeout(function () {
+    dark.style.clipPath = "inset(" + (100 - pct * 100).toFixed(2) + "% 0 0 0)";
+  }, 150);
+</script>
+</body>
+</html>
