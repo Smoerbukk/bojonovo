@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Bojo Novo-aften</title>
+<title>Bojo Novo-aften fredag 20. november</title>
 <link rel="icon" type="image/png" href="apple-touch-icon.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -86,6 +86,16 @@
   .intro p { margin: 0 0 1em; }
   .intro p:last-child { margin-bottom: 0; }
 
+  /* Lenker */
+  a {
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: .2em;
+  }
+  .intro p.more { margin-top: 1.25rem; }
+  .more { margin: 1.25rem 0 0; }
+
   /* Details */
   .details { margin: 2.5rem 0 0; border-top: 1px solid var(--line); }
   .row {
@@ -97,6 +107,7 @@
   }
   .row dt { color: var(--muted); font-weight: 500; }
   .row dd { margin: 0; }
+  .tbd { color: var(--muted); font-style: italic; }
 
   /* Wine list */
   h2 {
@@ -144,6 +155,7 @@
   <section class="intro">
     <p>Det finnes ikke noe ferskere enn Beaujolais Nouveau! Det er som saft for voksne. Gærgøtt, som man sier i Elverum.</p>
     <p>Det blir mat i magen før det blir noe godt i glasset, så kom både sulten og tørst.</p>
+    <p class="more"><a href="https://www.vinmonopolet.no/fag/artikler/hva-er-beaujolais-nouveau" target="_blank" rel="noopener">Les mer om Beaujolais Nouveau her</a></p>
   </section>
 
   <dl class="details">
@@ -153,7 +165,7 @@
     </div>
     <div class="row">
       <dt>Hvor</dt>
-      <dd>La maison de Citona</dd>
+      <dd><span class="tbd">TBD</span></dd>
     </div>
   </dl>
 
@@ -177,7 +189,8 @@
   <section aria-labelledby="vinliste">
     <h2 id="vinliste">Vinlisten</h2>
     <ul class="wines" id="wine-list"></ul>
-    <p class="empty" id="wine-empty">Lanseringslisten fra Vinmonopolet slippes 13. november. Vinlisten vil bli oppdatert fortløpende etter dette.</p>
+    <p class="empty" id="wine-empty">Vinlisten er ikke klar ennå. Kom tilbake hit senere.</p>
+    <p class="more"><a href="https://www.vinmonopolet.no/lanseringer/beaujolais-nouveau-2026" target="_blank" rel="noopener">Les mer om slippet her</a></p>
   </section>
 </main>
 </div>
@@ -213,6 +226,7 @@
   var dark = document.createElement("div");
   dark.className = "page-dark";
   dark.setAttribute("aria-hidden", "true");
+  dark.setAttribute("inert", "");
   var clone = page.querySelector("main").cloneNode(true);
   Array.prototype.forEach.call(clone.querySelectorAll("[id]"), function (e) {
     e.removeAttribute("id");
